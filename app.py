@@ -16,13 +16,17 @@ def  main():
         
 
                           
-        pdf_loc = st.text_input("PDF File Location")
+        uploaded_files = st.file_uploader("Choose a PDF file", accept_multiple_files=True)
+        for uploaded_file in uploaded_files:
+            bytes_data = uploaded_file.read()
+            st.write("filename:", uploaded_file.name)
+            st.write(bytes_data)
         pdf_pass = st.text_input("PDF Password")
         
         unlock = st.button("Unlock PDF")
         if unlock:
 
-            pdf = pikepdf.open(pdf_loc, password=pdf_pass)
+            pdf = pikepdf.open(uploaded_file.name, password=pdf_pass)
             pdf_save = st.text_input("Save file as: ")
             if pdf_save:
 
