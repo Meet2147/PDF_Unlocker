@@ -1,2 +1,3 @@
 pikepdf
 streamlit
+pyPDF2
