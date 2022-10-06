@@ -20,83 +20,57 @@ def  main():
         for uploaded_file in uploaded_files:
             bytes_data = uploaded_file.read()
             st.write("filename:", uploaded_file.name)
-            st.write(bytes_data)
-        pdf_pass = st.text_input("PDF Password")
+            
+            
+            
+            pdf_pass = st.text_input("PDF Password")
         
         unlock = st.button("Unlock PDF")
         if unlock:
 
-            pdf = pikepdf.open(uploaded_file.name, password=pdf_pass)
-            pdf_save = st.text_input("Save file as: ")
-            if pdf_save:
+            pdf = pikepdf.open(uploaded_file, password=pdf_pass)
+            pdf.save(uploaded_file.name)
+            st.write("File successfully unlocked - Please subscribe to download")
+            
+            
+            with open(uploaded_file.name, "rb") as f:
+                PDFbyte = f.read()
 
+                st.download_button(label="Download",
+                data=PDFbyte,
+                file_name=uploaded_file.name,
+                mime='application/octet-stream')
+        
+        
 
-                pdf.save(pdf_save)
-                st.write("File successfully unlocked - Please subscribe to download")
-                Subscribe = st.button("Subscribe")
-                if Subscribe:
-                    with open(pdf_save, "rb") as f:
-                        PDFbyte = f.read()
-
-                    st.download_button(label="Download PDF",
-                                data=PDFbyte,
-                                file_name=pdf_save,
-                                mime='application/octet-stream')
-                    
-                    
-
-                    st.write("The password successfully removed from the PDF")
                 
-                
-                components.html("""<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="learnapplybuild" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>""", 
+            components.html("""<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="learnapplybuild" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>""", 
                             height=200)
     elif option == 'Merge PDF':
-        pdfs = []
-        pdf1 = st.text_input("First PDF File Location")
-        pdfs.append(pdf1)
-        pdf2 = st.text_input("Second PDF File Location")
-        pdfs.append(pdf2)
         
-        add = st.button("Add PDF")
-        if add:
-            pdf3 = st.text_input("Third PDF File Location")
-            pdfs.append(pdf3)
-            pdf4 = st.text_input("Fourth PDF File Location")
-            pdfs.append(pdf4)
+        uploaded_files = st.file_uploader("Choose a PDF file", accept_multiple_files=True)
+        for uploaded_file in uploaded_files:
+            bytes_data = uploaded_file.read()
+            st.write("filename:", uploaded_file.name)
             
         
-            merge = st.button("Merge")
-            if merge:
-                merger = PdfFileMerger()
-                for pdf in pdfs:
-                    merger.append(pdf)
+        
+        merge = st.button("Merge")  
+        if merge:  
+            merger = PdfFileMerger()
+            for pdf in uploaded_files:
+                merger.append(pdf)
 
-                    merger.write("result.pdf")
-                    merger.close()
+                merger.write("result.pdf")
+                
+                
             with open("result.pdf", "rb") as f:
-                        PDFbyte = f.read()
+                PDFbyte = f.read()
 
             st.download_button(label="Download PDF",
                                 data=PDFbyte,
                                 file_name="result.pdf",
                                 mime='application/octet-stream')
-        else:
-            merge = st.button("Merge")
-            if merge:
-            
-                merger = PdfFileMerger()
-                for pdf in pdfs:
-                    merger.append(pdf)
-
-                    merger.write("result.pdf")
-                    
-                with open("result.pdf", "rb") as f:
-                    PDFbyte = f.read()
-
-                st.download_button(label="Download PDF",
-                                    data=PDFbyte,
-                                    file_name="result.pdf",
-                                    mime='application/octet-stream')
                 
         
         
