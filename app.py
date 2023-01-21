@@ -1,7 +1,7 @@
 
 import pikepdf
 import streamlit as st
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfWriter
 import streamlit.components.v1 as components
 
 
@@ -57,7 +57,7 @@ def  main():
         
         merge = st.button("Merge")  
         if merge:  
-            merger = PdfFileMerger()
+            merger = PdfWriter()
             for pdf in uploaded_files:
                 merger.append(pdf)
 
